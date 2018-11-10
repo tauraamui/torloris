@@ -4,19 +4,65 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
 	"time"
 
 	"github.com/cretz/bine/tor"
+	"github.com/tacusci/logging"
 	"golang.org/x/net/html"
 )
 
-func main() {
-	if err := run(); err != nil {
-		log.Fatal(err)
+type torClient struct {
+	t          *tor.Tor
+	client     *http.Client
+	dialCancel context.CancelFunc
+}
+
+func (tc *torClient) Init() error {
+	t, err := tor.Start(nil, nil)
+	if err != nil {
+		return err
 	}
+
+	tc.t = t
+
+	dialCtx, dialCancel := context.WithTimeout(context.Background(), time.Minute)
+	if err != nil {
+		dialCancel()
+		return err
+	}
+
+	tc.dialCancel = dialCancel
+
+	dialer, err := tc.t.Dialer(dialCtx, nil)
+	if err != nil {
+		dialCancel()
+		return err
+	}
+
+	tc.client = &http.Client{Transport: &http.Transport{DialContext: dialer.DialContext}}
+
+	return nil
+}
+
+func main() {
+	torClient := torClient{}
+	torClient.Init()
+
+	resp, err := torClient.client.Get("https://check.torproject.org")
+	if err != nil {
+		logging.Error(fmt.Sprintf("%v", err))
+	}
+	defer resp.Body.Close()
+	// Grab the <title>
+	parsed, err := html.Parse(resp.Body)
+	if err != nil {
+		logging.Error(fmt.Sprintf("%v", err))
+	}
+	fmt.Printf("Title: %v\n", getTitle(parsed))
+
+	torClient.dialCancel()
 }
 
 func run() error {

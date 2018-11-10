@@ -1,0 +1,32 @@
+# Tor state file last generated on 2018-11-10 10:25:47 local time
+# Other times below are in UTC
+# You *do not* need to edit this file.
+
+Guard in=default rsa_id=AE4F57B79B42C3D63DF57927DC2D648D2F0922FA nickname=Andromeda sampled_on=2018-10-30T06:02:56 sampled_by=0.3.4.9 listed=1 confirmed_on=2018-11-02T02:05:50 confirmed_idx=0 pb_use_attempts=2.000000 pb_use_successes=2.000000 pb_circ_attempts=8.000000 pb_circ_successes=8.000000 pb_successful_circuits_closed=8.000000
+Guard in=default rsa_id=E245292C7F53DBDF51732C80CF3CA5E8A8DD2820 nickname=ubuntutest2 sampled_on=2018-10-30T12:22:23 sampled_by=0.3.4.9 listed=1
+Guard in=default rsa_id=C2FB346ECEA48FC980AD442BADB7CD10E14E53A6 nickname=RocklinTorRelay sampled_on=2018-11-07T11:11:23 sampled_by=0.3.4.9 listed=1
+Guard in=default rsa_id=265E5ABBF2E5846443901E878146060148EFEA44 nickname=wikimediaeqiad2 sampled_on=2018-10-30T16:16:50 sampled_by=0.3.4.9 listed=1
+Guard in=default rsa_id=C1B6AFE18C6F65631A4EF67E1A1918B59316F59F nickname=KagamineLenStardust sampled_on=2018-11-02T00:50:14 sampled_by=0.3.4.9 listed=1
+Guard in=default rsa_id=0F7EA67E015E660846D0A1099AF9B99889EF4FB4 nickname=StoneIdentifiction sampled_on=2018-10-29T11:41:43 sampled_by=0.3.4.9 listed=1
+Guard in=default rsa_id=6980979CDC12EDEA311E92AB7DB39DF4CD873D64 nickname=guenthergraubein sampled_on=2018-10-31T09:52:39 sampled_by=0.3.4.9 listed=1
+Guard in=default rsa_id=6A7551EEE18F78A9813096E82BF84F740D32B911 nickname=TorMachine sampled_on=2018-11-03T08:48:34 sampled_by=0.3.4.9 listed=1 confirmed_on=2018-11-02T05:54:50 confirmed_idx=2
+Guard in=default rsa_id=29618AABFCB0F4AA5F52B075A6CA0CB7C07DE699 nickname=DooTooFooBeaf sampled_on=2018-10-30T18:01:33 sampled_by=0.3.4.9 listed=1
+Guard in=default rsa_id=7DC1A544A4A6A87ACC5D3B2254D6E3B93442BA7C nickname=CanopusAHHSI sampled_on=2018-10-30T15:31:28 sampled_by=0.3.4.9 listed=1
+Guard in=default rsa_id=CE6813FEA256EE63BCD2A178E453202BFAA64FA7 nickname=itsyndikat sampled_on=2018-11-08T01:57:44 sampled_by=0.3.4.9 listed=1
+Guard in=default rsa_id=C67E693A41F0CA72C63886165225845E72AE8171 nickname=justhelpingout2 sampled_on=2018-11-04T00:51:42 sampled_by=0.3.4.9 listed=1
+Guard in=default rsa_id=6315278A91710062D90B288199EFA06E4AAA9E8F nickname=unnamed314 sampled_on=2018-11-06T10:11:03 sampled_by=0.3.4.9 listed=1
+Guard in=default rsa_id=77D2EA7E9BC5708A07CB9ED3F02512D4EA8A9B8B nickname=DipulseIT6 sampled_on=2018-11-07T05:38:24 sampled_by=0.3.4.9 listed=1
+Guard in=default rsa_id=3BBF9D98C7D058D7C2E60F6BA5BD574CB4F3FE26 nickname=Tiny sampled_on=2018-10-30T02:42:29 sampled_by=0.3.4.9 listed=1
+Guard in=default rsa_id=B68A2E030E0092C4ED37D1CA6286CCDF1458AFD1 nickname=GMoney sampled_on=2018-11-02T20:48:11 sampled_by=0.3.4.9 listed=1
+Guard in=default rsa_id=F5B58FEE44573C3BFD7D176D918BA5B4057519D7 nickname=bistrv1 sampled_on=2018-10-30T06:42:49 sampled_by=0.3.4.9 listed=1
+Guard in=default rsa_id=F38310ED198C56E1434A17A7C9282D00D2750935 nickname=luelistan2 sampled_on=2018-11-06T02:09:32 sampled_by=0.3.4.9 listed=1
+Guard in=default rsa_id=F592C2250162163068D08ADFFEB42D4C56E4965D nickname=Piratenpartei2 sampled_on=2018-11-03T21:53:31 sampled_by=0.3.4.9 listed=1
+Guard in=default rsa_id=2A0FAD3CA7A190C43D8ED7896727BD426E8C2EFA nickname=HassoBarks sampled_on=2018-11-01T10:25:50 sampled_by=0.3.4.9 listed=1 confirmed_on=2018-10-31T06:28:24 confirmed_idx=1
+TorVersion Tor 0.3.4.9 (git-4ac3ccf2863b86e7)
+LastWritten 2018-11-10 10:25:47
+TotalBuildTimes 8
+CircuitBuildTimeBin 675 1
+CircuitBuildTimeBin 775 1
+CircuitBuildTimeBin 825 4
+CircuitBuildTimeBin 975 1
+CircuitBuildTimeBin 11275 1
