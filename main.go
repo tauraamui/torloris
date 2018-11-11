@@ -12,6 +12,11 @@ func main() {
 		logging.ErrorAndExit(err.Error())
 	}
 
-	client.CheckTorConnection()
+	logging.InfoNnlNoColor("Checking connected via Tor service... ")
+	if client.CheckTorConnection() {
+		logging.GreenOutput("Connected!\n")
+	} else {
+		logging.RedOutput("Not connected!\n")
+	}
 	client.Close()
 }
