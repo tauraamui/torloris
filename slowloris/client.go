@@ -74,6 +74,7 @@ func (c *Client) Close() {
 	if c.dialCancel != nil {
 		c.dialCancel()
 	}
+	c.tor.Close()
 }
 
 func getTitle(n *html.Node) string {
