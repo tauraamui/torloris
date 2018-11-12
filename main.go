@@ -26,9 +26,13 @@ func main() {
 		logging.RedOutput("Not connected!\n")
 	}
 
-	client.Attack("")
+	client.Running = true
 
-	client.Close()
+	for i := 0; i < 500; i++ {
+		go client.Attack("")
+	}
+
+	for client.Running {}
 }
 
 func listenForStopSig(client *slowloris.Client) {

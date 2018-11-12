@@ -26,6 +26,7 @@ type Client struct {
 	Tor        *tor.Tor
 	HTTP       *http.Client
 	Dialer     *tor.Dialer
+	Running 	bool
 	dialCancel context.CancelFunc
 }
 
@@ -59,12 +60,18 @@ func (c *Client) startup() error {
 }
 
 func (c *Client) Attack(target string) {
+
 	var conn net.Conn
 
 	for {
 		if conn != nil {
 			conn.Close()
 		}
+
+		// switch {
+		// case c.Running == false:
+		// 	break
+		// }
 
 		conn, err := c.Dialer.Dial("tcp", target)
 		if err != nil {
@@ -105,6 +112,7 @@ func (c *Client) CheckTorConnection() bool {
 }
 
 func (c *Client) Close() {
+	c.Running = false
 	if c.dialCancel != nil {
 		c.dialCancel()
 	}
